@@ -5,6 +5,7 @@ import { LoggedinUserDto } from './dto/loggedin-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { TokenPayloadInterface } from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -21,8 +22,13 @@ export class AuthService {
   }
 
   async logInUser(loggedinUserDto: LoggedinUserDto) {
-    const user = await this.userService.getUserByEmail(loggedinUserDto.email);
+    console.log(loggedinUserDto);
+    const user = await this.userService.getUserBy(
+      'email',
+      loggedinUserDto.email,
+    );
 
+    console.log(user);
     const isPassswordMatched = await bcrypt.compare(
       loggedinUserDto.password,
       user.password,
@@ -37,7 +43,7 @@ export class AuthService {
   }
 
   public generateAccessToken(userId: string) {
-    const payload: any = { userId };
+    const payload: TokenPayloadInterface = { userId };
 
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESSTOKEN_SECRET'),

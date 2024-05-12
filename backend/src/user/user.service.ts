@@ -17,9 +17,18 @@ export class UserService {
     return newUser;
   }
 
-  async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOneBy({ email });
+  // async getUserByEmail(email: string) {
+  //   const user = await this.userRepository.findOneBy({ email });
+  //   if (user) return user;
+  //   throw new HttpException('no user', HttpStatus.NOT_FOUND);
+  // }
+
+  async getUserBy(key: 'id' | 'email', value: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ [key]: value });
     if (user) return user;
-    throw new HttpException('no user', HttpStatus.NOT_FOUND);
+    throw new HttpException(
+      `User with this ${key} does not exist`,
+      HttpStatus.NOT_FOUND,
+    );
   }
 }
