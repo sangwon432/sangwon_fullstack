@@ -4,6 +4,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { EmailVerificationDto } from '../user/dto/email-verification.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -38,5 +39,12 @@ export class AuthController {
     // return await this.authService.sendEmailTest(email);
     return await this.authService.initEmailVerification(email);
     // console.log(email);
+  }
+
+  @Post('/email/check')
+  async checkEmail(@Body() emailVerificationDto: EmailVerificationDto) {
+    return await this.authService.confirmEmailVerification(
+      emailVerificationDto,
+    );
   }
 }
