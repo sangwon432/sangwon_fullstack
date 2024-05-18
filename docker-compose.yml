@@ -32,6 +32,8 @@ services:
       context: './backend'
     depends_on:
       - sangwondb
+      - sangwon_redis
+# DON'T FORGET TO ADD REDIS OT WHATEVER DB IS ADDED ON LATER
     volumes:
       - /backend/node_modules
       - ./backend:/backend
@@ -80,6 +82,17 @@ services:
       - pg_data:/var/lib/postgresql/data/
     networks:
       - sangwon_networks
+  sangwon_redis:
+    container_name: sangwon_redis
+    image: "redis:alpine"
+    env_file:
+      - ./backend/.env
+    ports:
+      - 6379:6379
+    networks:
+      - sangwon_networks
+# ADD NETWORKS (GROUP IT WITH SAME NETWORKS)
+
 
 #    environment:
 #      - POSTGRES_HOST=sangwondb
