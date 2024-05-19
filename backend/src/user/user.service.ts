@@ -37,11 +37,13 @@ export class UserService {
   }
 
   async setCurrentRefreshTokenToRedis(refreshToken: string, userId: string) {
+    console.log('set refresh token called');
     const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     await this.cacheManager.set(userId, currentHashedRefreshToken);
   }
 
   async removeRefreshTokenFromRedis(userId: string) {
+    console.log('remove refresh token called');
     await this.cacheManager.del(userId);
   }
 }
