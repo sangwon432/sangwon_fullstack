@@ -46,4 +46,14 @@ export class UserService {
     console.log('remove refresh token called');
     await this.cacheManager.del(userId);
   }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
+    const user = await this.getUserBy('id', userId);
+    const getUserdFromRedis = await this.cacheManager.get(userId);
+    const isRefreshTokenMatched = await bcrypt.compare(
+      refreshToken,
+      getUserdFromRedis,
+    );
+    if (isRefreshTokenMatched) return user;
+  }
 }

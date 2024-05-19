@@ -6,6 +6,7 @@ import { AccessTokenGuard } from './guards/access-token.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { EmailVerificationDto } from '../user/dto/email-verification.dto';
 import { UserService } from '../user/user.service';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -69,5 +70,15 @@ export class AuthController {
     return await this.authService.confirmEmailVerification(
       emailVerificationDto,
     );
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('/refresh')
+  async refresh(@Req() req: RequestWithUserInterface) {
+    const accessCookie = await this.authService.generateAccessToken(
+      req.user.id,
+    );
+    req.res.setHeader('Set-Cookie', accessCookie);
+    return req.user;
   }
 }
