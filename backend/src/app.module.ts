@@ -21,6 +21,8 @@ import * as Joi from '@hapi/joi';
         POSTGRES_DB: Joi.string().required(),
         JWT_ACCESSTOKEN_SECRET: Joi.string().required(),
         JWT_ACCESSTOKEN_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESHTOKEN_SECRET: Joi.string().required(),
+        JWT_REFRESHTOKEN_EXPIRATION_TIME: Joi.string().required(),
         EMAIL_SERVICE: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
