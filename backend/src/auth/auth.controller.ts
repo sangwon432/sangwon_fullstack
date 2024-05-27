@@ -7,8 +7,10 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { EmailVerificationDto } from '../user/dto/email-verification.dto';
 import { UserService } from '../user/user.service';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

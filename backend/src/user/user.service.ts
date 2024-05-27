@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { CACHE_MANAGER } from '@nestjs/common/cache';
 import * as bcrypt from 'bcryptjs';
 import { Cache } from 'cache-manager';
+import { Profile } from '../profile/entities/profile.entity';
 
 @Injectable()
 export class UserService {
@@ -55,5 +56,20 @@ export class UserService {
       getUserdFromRedis,
     );
     if (isRefreshTokenMatched) return user;
+  }
+
+  async updateProfile(id: string, updateUserDto: CreateUserDto) {
+    return await this.userRepository.update({ id }, { ...updateUserDto });
+  }
+
+  async updateUserInfo(user: User, info: Profile) {
+    const existedUser = await this.userRepository.findOneBy({
+      id: user.id,
+    });
+
+    if (!existedUser) throw new Error('User not found');
+    existedUser.profile = info;
+
+    return await this.userRepository.save(existedUser);
   }
 }

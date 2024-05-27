@@ -1,7 +1,8 @@
 import { BaseEntity } from '../../common/base.entity';
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Provider } from './provider.enum';
+import { Profile } from '../../profile/entities/profile.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -20,6 +21,13 @@ export class User extends BaseEntity {
     default: Provider.LOCAL,
   })
   public provider: Provider;
+
+  @OneToOne(() => Profile, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  public profile: Profile;
 
   @BeforeInsert()
   async beforeSaveFunction(): Promise<void> {
